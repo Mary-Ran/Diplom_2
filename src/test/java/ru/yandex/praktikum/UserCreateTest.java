@@ -1,5 +1,6 @@
 package ru.yandex.praktikum;
 
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
@@ -29,6 +30,7 @@ public class UserCreateTest {
     }
 
     @Test
+    @Description("Проверка успешного создания пользователя")
     public void checkSuccessfulUserCreation() {
         UserCreateRequest userCreateRequest = new UserCreateRequest(email, password, name);
         Response response = userSteps.userCreate(userCreateRequest);
@@ -37,15 +39,17 @@ public class UserCreateTest {
     }
 
     @Test
+    @Description("Проверка создания двух одинаковых пользователей")
     public void checkTheCreationOfTwoIdenticalUsers() {
         UserCreateRequest userCreateRequest = new UserCreateRequest(email, password, name);
         userSteps.userCreate(userCreateRequest);
         Response response = userSteps.userCreate(userCreateRequest);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, messageInResponseBody[0]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, MESSAGE_IN_RESPONSE_BODY[0]);
     }
 
     @Test
+    @Description("Проверка создания двух пользователей с одинаковым email")
     public void checkTheCreationOfTwoUsersWithTheSameLogins() {
         String newPassword = RandomStringUtils.randomAlphanumeric(10);
         String newName = RandomStringUtils.randomAlphanumeric(10);
@@ -54,37 +58,40 @@ public class UserCreateTest {
         userSteps.userCreate(firstUser);
         Response response = userSteps.userCreate(secondUser);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, messageInResponseBody[0]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, MESSAGE_IN_RESPONSE_BODY[0]);
     }
 
     @Test
+    @Description("Проверкка создания пользователя без передачи email")
     public void checkTheCreationOfUserWithoutEmail() {
         UserCreateRequest userCreateRequest = new UserCreateRequest();
         userCreateRequest.setPassword(password);
         userCreateRequest.setName(name);
         Response response = userSteps.userCreate(userCreateRequest);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, messageInResponseBody[1]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, MESSAGE_IN_RESPONSE_BODY[1]);
     }
 
     @Test
+    @Description("Проверка создания пользователя без передачи пароля")
     public void checkTheCreationOfUserWithoutPassword() {
         UserCreateRequest userCreateRequest = new UserCreateRequest();
         userCreateRequest.setEmail(email);
         userCreateRequest.setName(name);
         Response response = userSteps.userCreate(userCreateRequest);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, messageInResponseBody[1]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, MESSAGE_IN_RESPONSE_BODY[1]);
     }
 
     @Test
+    @Description("Проверка создания пользователя без передачи имени")
     public void checkTheCreationOfUserWithoutName() {
         UserCreateRequest userCreateRequest = new UserCreateRequest();
         userCreateRequest.setEmail(email);
         userCreateRequest.setPassword(password);
         Response response = userSteps.userCreate(userCreateRequest);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, messageInResponseBody[1]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, MESSAGE_IN_RESPONSE_BODY[1]);
     }
 
     @After

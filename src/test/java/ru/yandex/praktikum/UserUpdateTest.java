@@ -1,5 +1,6 @@
 package ru.yandex.praktikum;
 
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.AfterClass;
@@ -38,6 +39,7 @@ public class UserUpdateTest {
     }
 
     @Test
+    @Description("Проверка изменения email авторизованного пользователя")
     public void checkUpdateEmailFieldWithUserAuth() {
         String newEmail = RandomStringUtils.randomAlphanumeric(10).toLowerCase() + "@yandex.ru";
         UserCreateRequest userUpdateRequest = new UserCreateRequest(newEmail, password, name);
@@ -47,6 +49,7 @@ public class UserUpdateTest {
     }
 
     @Test
+    @Description("Проверка изменения имени авторизованного пользователя")
     public void checkUpdateNameFieldWithUserAuth() {
         String newName = RandomStringUtils.randomAlphanumeric(10);
         UserCreateRequest userUpdateRequest = new UserCreateRequest(email, password, newName);
@@ -56,6 +59,7 @@ public class UserUpdateTest {
     }
 
     @Test
+    @Description("Проверка изменения пароля авторизованного пользователя")
     public void checkUpdatePasswordFieldWithUserAuth() {
         String newPassword = RandomStringUtils.randomAlphanumeric(10);
         UserCreateRequest userUpdateRequest = new UserCreateRequest(email, newPassword, name);
@@ -66,38 +70,42 @@ public class UserUpdateTest {
     }
 
     @Test
+    @Description("Проверка отправки запроса без изменения значений email, пароль и имя для авторизованного пользователя")
     public void checkSetAllFieldsToTheCurrentValueWithUserAuth() {
         UserCreateRequest userUpdateRequest = new UserCreateRequest(email, password, name);
         Response response = userSteps.userUpdateWithAuth(userUpdateRequest, accessToken);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, messageInResponseBody[4]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode403(response, MESSAGE_IN_RESPONSE_BODY[4]);
     }
 
     @Test
+    @Description("Проверка изменения email без авторизации пользователя")
     public void checkUpdateEmailFieldWithoutUserAuth() {
         String newEmail = RandomStringUtils.randomAlphanumeric(10) + "@yandex.ru";
         UserCreateRequest userUpdateRequest = new UserCreateRequest(newEmail, password, name);
         Response response = userSteps.userUpdateWithoutAuth(userUpdateRequest);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, messageInResponseBody[3]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, MESSAGE_IN_RESPONSE_BODY[3]);
     }
 
     @Test
+    @Description("Проверка изменения пароля без авторизации пользователя")
     public void checkUpdatePasswordFieldWithoutUserAuth() {
         String newPassword = RandomStringUtils.randomAlphanumeric(10);
         UserCreateRequest userUpdateRequest = new UserCreateRequest(email, newPassword, name);
         Response response = userSteps.userUpdateWithoutAuth(userUpdateRequest);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, messageInResponseBody[3]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, MESSAGE_IN_RESPONSE_BODY[3]);
     }
 
     @Test
+    @Description("Проверка изменения имени без авторизации пользователя")
     public void checkUpdateNameFieldWithoutUserAuth() {
         String newName = RandomStringUtils.randomAlphanumeric(10);
         UserCreateRequest userUpdateRequest = new UserCreateRequest(email, password, newName);
         Response response = userSteps.userUpdateWithoutAuth(userUpdateRequest);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, messageInResponseBody[3]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, MESSAGE_IN_RESPONSE_BODY[3]);
     }
 
     @AfterClass

@@ -1,5 +1,6 @@
 package ru.yandex.praktikum;
 
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.AfterClass;
@@ -13,7 +14,7 @@ import ru.yandex.praktikum.steps.VerificationSteps;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.yandex.praktikum.config.RestConfig.messageInResponseBody;
+import static ru.yandex.praktikum.config.RestConfig.MESSAGE_IN_RESPONSE_BODY;
 
 public class OrderCreateTest {
     private static UserSteps userSteps;
@@ -41,6 +42,7 @@ public class OrderCreateTest {
     }
 
     @Test
+    @Description("Проверка создания заказа с тремя ингредиентами и авторизованным пользователем")
     public void checkOrderCreateWithUserAuthAndThreeIngredientsInTheList() {
         ArrayList<String> ingredients = orderSteps.getIngredients()
                 .then()
@@ -52,15 +54,17 @@ public class OrderCreateTest {
     }
 
     @Test
+    @Description("Проверка создания заказа с пустым списком ингредиентов и авторизованным пользователем")
     public void checkOrderCreateWithUserAuthAndEmptyIngredientsList() {
         ArrayList<String> ingredients = new ArrayList<>();
         OrderCreateRequest orderCreateRequest = new OrderCreateRequest(ingredients);
         Response response = orderSteps.orderCreateWithUserAuth(orderCreateRequest, accessToken);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode400(response, messageInResponseBody[5]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode400(response, MESSAGE_IN_RESPONSE_BODY[5]);
     }
 
     @Test
+    @Description("Проверка создания заказа с неверным хешем ингредиента и авторизованным пользователем")
     public void checkOrderCreateWithUserAuthAndInvalidIngredientHashInTheList() {
         String invalidIngredientHash = RandomStringUtils.randomAlphanumeric(15);
         ArrayList<String> ingredients = orderSteps.getIngredients()
@@ -74,6 +78,7 @@ public class OrderCreateTest {
     }
 
     @Test
+    @Description("Проверка создания заказа с тремя ингредиентами и без авторизации пользователя")
     public void checkOrderCreateWithoutUserAuthAndThreeIngredientsInTheList() {
         ArrayList<String> ingredients = orderSteps.getIngredients()
                 .then()
@@ -85,15 +90,17 @@ public class OrderCreateTest {
     }
 
     @Test
+    @Description("Проверка создания заказа с пустым списком ингредиентов и без авторизации пользователя")
     public void checkOrderCreateWithoutUserAuthAndEmptyIngredientsList() {
         ArrayList<String> ingredients = new ArrayList<>();
         OrderCreateRequest orderCreateRequest = new OrderCreateRequest(ingredients);
         Response response = orderSteps.orderCreateWithoutUserAuth(orderCreateRequest);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode400(response, messageInResponseBody[5]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode400(response, MESSAGE_IN_RESPONSE_BODY[5]);
     }
 
     @Test
+    @Description("Проверка создания заказа с неверным хешем ингредиента и без авторизации пользователя")
     public void checkOrderCreateWithoutUserAuthAndInvalidIngredientHashInTheList() {
         String invalidIngredientHash = RandomStringUtils.randomAlphanumeric(15);
         ArrayList<String> ingredients = orderSteps.getIngredients()

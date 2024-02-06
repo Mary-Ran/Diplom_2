@@ -1,5 +1,6 @@
 package ru.yandex.praktikum;
 
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
@@ -31,6 +32,7 @@ public class UserLoginTest {
     }
 
     @Test
+    @Description("Проверка успешной авторизации пользователя")
     public void checkSuccessfulUserAuth() {
         UserLoginRequest userLoginRequest = new UserLoginRequest(email, password);
         Response response = userSteps.userLogin(userLoginRequest);
@@ -39,21 +41,23 @@ public class UserLoginTest {
     }
 
     @Test
+    @Description("Проверка авторизации пользователя с некорректным email")
     public void checkTheUserAuthWithIncorrectEmail() {
         String newEmail = RandomStringUtils.randomAlphanumeric(10) + "@yandex.ru";
         UserLoginRequest userLoginRequest = new UserLoginRequest(newEmail, password);
         Response response = userSteps.userLogin(userLoginRequest);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, messageInResponseBody[2]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, MESSAGE_IN_RESPONSE_BODY[2]);
     }
 
     @Test
+    @Description("Проверка авторизации пользователя с некорректным паролем")
     public void checkTheUserAuthWithIncorrectPassword() {
         String newPassword = RandomStringUtils.randomAlphanumeric(10);
         UserLoginRequest userLoginRequest = new UserLoginRequest(email, newPassword);
         Response response = userSteps.userLogin(userLoginRequest);
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, messageInResponseBody[2]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, MESSAGE_IN_RESPONSE_BODY[2]);
     }
 
     @After

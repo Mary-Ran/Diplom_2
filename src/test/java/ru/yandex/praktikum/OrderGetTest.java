@@ -1,5 +1,6 @@
 package ru.yandex.praktikum;
 
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.AfterClass;
@@ -40,6 +41,7 @@ public class OrderGetTest {
     }
 
     @Test
+    @Description("Проверка получения заказов конкретного пользователя без авторизации пользователя")
     public void checkGetListOfOrdersForASpecificUserWithoutUserAuth() {
         ArrayList<String> ingredients = orderSteps.getIngredients()
                 .then()
@@ -48,10 +50,11 @@ public class OrderGetTest {
         orderSteps.orderCreateWithUserAuth(orderCreateRequest, accessToken);
         Response response = orderSteps.getListOfOrdersForASpecificUserWithoutUserAuth();
 
-        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, messageInResponseBody[3]);
+        verificationSteps.checkSuccessAndMessageInResponseBodyAndStatusCode401(response, MESSAGE_IN_RESPONSE_BODY[3]);
     }
 
     @Test
+    @Description("Проверка получения заказов конкретного авторизованного пользователя")
     public void checkGetListOfOrdersForASpecificUserWithUserAuth() {
         ArrayList<String> ingredients = orderSteps.getIngredients()
                 .then()
